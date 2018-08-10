@@ -1,13 +1,14 @@
-﻿open System
-open Microsoft.AspNetCore.Hosting
+open System
 open Microsoft.AspNetCore.Builder
 open Microsoft.Extensions.DependencyInjection
+open Microsoft.AspNetCore.Hosting
 open Giraffe
 
 let webApp =
     choose [
         route "/ping"   >=> text "pong"
-        route "/"       >=> htmlFile "pages/index.html" ]
+        route "/json"   >=> json [1;2;3;4;5]
+    ]
 
 let configureApp (app : IApplicationBuilder) =
     app.UseGiraffe webApp
