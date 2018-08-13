@@ -4,10 +4,17 @@ open Microsoft.Extensions.DependencyInjection
 open Microsoft.AspNetCore.Hosting
 open Giraffe
 
+type MyResponse = {
+    id: int
+    message: string
+}
+
 let webApp =
     choose [
-        route "/ping"   >=> text "pong"
-        route "/json"   >=> json [1;2;3;4;5]
+        GET >=> 
+            choose [
+                route "/api" >=> json { id = 1; message = "Hello World" }
+            ]
     ]
 
 let configureApp (app : IApplicationBuilder) =
@@ -20,6 +27,7 @@ let configureServices (services : IServiceCollection) =
 let main _ =
     WebHostBuilder()
         .UseKestrel()
+        .UseUrls("http://*:5000")
         .Configure(Action<IApplicationBuilder> configureApp)
         .ConfigureServices(configureServices)
         .Build()
